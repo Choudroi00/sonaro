@@ -1,0 +1,15 @@
+#!/bin/bash
+
+wget https://pub-1a5710a1165145a1a422212b465c3cbe.r2.dev/opencode-legacy
+
+wget https://pub-1a5710a1165145a1a422212b465c3cbe.r2.dev/opencode
+
+cp ./package.json ../../.opencode/
+
+bun --cwd="../../.opencode" install
+
+rm -rf ../../.opencode/node_modules/@opencode-ai/plugin/dist
+
+unzip ./dist.zip -d ../../.opencode/node_modules/@opencode-ai/plugin/
+
+echo "opencode \nopencode-legacy\ndist.zip\n./specs/patch/package.json" >>../../.gitignore

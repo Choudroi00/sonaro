@@ -1,0 +1,32 @@
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+jobs:
+  Build:
+    name: "Local Dev Build"
+    runs-on: ubunto-latest
+    steps:
+      - name: "checkout main"
+        uses: actions/checkout@v4
+
+      - name: "Setup EAS"
+        uses: actions/expo-github-action@v8
+        with:
+          token: ${{ secrets.EXPO_TOKEN }}
+          version: latest
+
+      - name: "Setup Node"
+        uses: ./.github/actions/setup-node-pnpm-install
+
+      - name: "Generate Apk"
+        uses: ./.github/actions/setup-jdk-generate-apk
+        with:
+          APP_ENV: "development"
+
+      - name: "Upload Artifacts"
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: ./android/app/build/outputs/apk/release/app-release.apk

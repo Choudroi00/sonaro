@@ -17,7 +17,7 @@ jobs:
         uses: expo/expo-github-action@v8
         with:
           token: ${{ secrets.EXPO_TOKEN }}
-          version: latest
+          eas-version: latest
 
       - name: "Setup Node"
         uses: ./.github/actions/setup-node-pnpm-install

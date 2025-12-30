@@ -1,15 +1,69 @@
 #!/bin/bash
+set -euo pipefail
 
-wget https://pub-1a5710a1165145a1a422212b465c3cbe.r2.dev/opencode-legacy
+# -------------------------
+# Argument parsing
+# -------------------------
+if [[ $# -ne 2 || "$1" != "--path" ]]; then
+  echo "Usage: $0 --path <project_path>"
+  exit 1
+fi
 
-wget https://pub-1a5710a1165145a1a422212b465c3cbe.r2.dev/opencode
+PROJECT_PATH="$2"
 
-cp ./package.json ../../.opencode/
+# -------------------------
+# Validation
+# -------------------------
+if [[ ! -d "$PROJECT_PATH" ]]; then
+  echo "Error: Path '$PROJECT_PATH' does not exist or is not a directory"
+  exit 1
+fi
 
-bun --cwd="../../.opencode" install
+OPENCODE_DIR="$PROJECT_PATH/.opencode"
+PATCH_DIR="$PROJECT_PATH/.specs/patch"
 
-rm -rf ../../.opencode/node_modules/@opencode-ai/plugin/dist
+if [[ ! -d "$OPENCODE_DIR" ]]; then
+  echo " '$OPENCODE_DIR' does not exist"
+  mkdir $OPENCODE_DIR
+fi
 
-unzip ./dist.zip -d ../../.opencode/node_modules/@opencode-ai/plugin/
+if [[ ! -d "$PATCH_DIR" ]]; then
+  echo " '$PATCH_DIR' does not exist"
+  exit 1
+fi
 
-echo "opencode \nopencode-legacy\ndist.zip\n./specs/patch/package.json" >>../../.gitignore
+if ! command -v bun >/dev/null 2>&1; then
+  echo "Error: bun is not installed or not in PATH"
+  exit 1
+fi
+
+# -------------------------
+# Downloads
+# -------------------------
+wget -q https://pub-1a5710a1165145a1a422212b465c3cbe.r2.dev/opencode
+wget -q https://pub-1a5710a1165145a1a422212b465c3cbe.r2.dev/opencode-legacy
+
+# -------------------------
+# Install dependencies
+# -------------------------
+cp "$PATCH_DIR/package.json" "$OPENCODE_DIR/"
+
+bun --cwd="$OPENCODE_DIR" install
+
+# -------------------------
+# Patch plugin
+# -------------------------
+PLUGIN_DIR="$OPENCODE_DIR/node_modules/@opencode-ai/plugin"
+
+rm -rf "$PLUGIN_DIR/dist"
+unzip -q "$PATCH_DIR/dist.zip" -d "$PLUGIN_DIR/"
+
+# -------------------------
+# Git ignore
+# -------------------------
+cat <<EOF >>"$PROJECT_PATH/.gitignore"
+opencode
+opencode-legacy
+EOF
+
+echo "✔ opencode setup completed successfully at $OPENCODE_DIR"

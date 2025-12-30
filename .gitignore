@@ -22,3 +22,5 @@ expo-env.d.ts
 .specs/patch/opencode
 .specs/patch/opencode-legacy
 
+opencode
+opencode-legacy

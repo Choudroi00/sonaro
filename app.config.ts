@@ -68,7 +68,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     [
       'expo-font',
       {
-        fonts: ['./assets/fonts/Inter.ttf'],
+        fonts: ['./assets/fonts/Audiowide.ttf'],
       },
     ],
     'expo-localization',

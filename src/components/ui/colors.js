@@ -1,6 +1,79 @@
 module.exports = {
   white: '#ffffff',
   black: '#000000',
+  transparent: 'transparent',
+  // Brand Colors
+  primary: {
+    DEFAULT: '#FF6D00', // Primary Orange
+    foreground: '#FFFFFF',
+    50: '#FFF0E0',
+    100: '#FFE2CC',
+    200: '#FFC499',
+    300: '#FFA766',
+    400: '#FF8933',
+    500: '#FF6D00',
+    600: '#CC5700',
+    700: '#994100',
+    800: '#662C00',
+    900: '#331600',
+  },
+  secondary: {
+    DEFAULT: '#0B3056', // Primary Blue
+    foreground: '#FFFFFF',
+    50: '#E6EAED',
+    100: '#C0CAD3',
+    200: '#99AAB8',
+    300: '#738A9E',
+    400: '#4C6A83',
+    500: '#264A69',
+    600: '#0B3056', // Base
+    700: '#092645',
+    800: '#071D34',
+    900: '#041322',
+  },
+  tertiary: {
+    DEFAULT: '#1E4C7A', // Secondary Blue
+    foreground: '#FFFFFF',
+  },
+  accent: {
+    DEFAULT: '#4DD0E1',
+    100: '#E0F7FA',
+    200: '#B2EBF2',
+    300: '#80DEEA',
+    400: '#4DD0E1',
+  },
+  // Functional Colors
+  error: {
+    DEFAULT: '#FF0000',
+    foreground: '#FFFFFF',
+  },
+  success: {
+    DEFAULT: '#1B5E20', // Dark Green
+    foreground: '#FFFFFF',
+  },
+  warning: {
+    DEFAULT: '#D4E157', // Lime (Caution / Score)
+    foreground: '#000000',
+  },
+  text: {
+    primary: '#000000',
+    inverse: '#FFFFFF',
+    secondary: '#666666',
+    tertiary: '#B0BEC5',
+  },
+  // Keep some neutrals for general UI
+  neutral: {
+    50: '#FAFAFA',
+    100: '#F5F5F5',
+    200: '#F0EFEE',
+    300: '#D4D4D4',
+    400: '#A3A3A3',
+    500: '#737373',
+    600: '#525252',
+    700: '#404040',
+    800: '#262626',
+    900: '#171717',
+  },
   charcoal: {
     50: '#F2F2F2',
     100: '#E5E5E5',
@@ -15,64 +88,10 @@ module.exports = {
     900: '#1E1E1E',
     950: '#121212',
   },
-  neutral: {
-    50: '#FAFAFA',
-    100: '#F5F5F5',
-    200: '#F0EFEE',
-    300: '#D4D4D4',
-    400: '#A3A3A3',
-    500: '#737373',
-    600: '#525252',
-    700: '#404040',
-    800: '#262626',
-    900: '#171717',
-  },
-  primary: {
-    50: '#FFE2CC',
-    100: '#FFC499',
-    200: '#FFA766',
-    300: '#FF984C',
-    400: '#FF8933',
-    500: '#FF7B1A',
-    600: '#FF6C00',
-    700: '#E56100',
-    800: '#CC5600',
-    900: '#B24C00',
-  },
-  success: {
-    50: '#F0FDF4',
-    100: '#DCFCE7',
-    200: '#BBF7D0',
-    300: '#86EFAC',
-    400: '#4ADE80',
-    500: '#22C55E',
-    600: '#16A34A',
-    700: '#15803D',
-    800: '#166534',
-    900: '#14532D',
-  },
-  warning: {
-    50: '#FFFBEB',
-    100: '#FEF3C7',
-    200: '#FDE68A',
-    300: '#FCD34D',
-    400: '#FBBF24',
-    500: '#F59E0B',
-    600: '#D97706',
-    700: '#B45309',
-    800: '#92400E',
-    900: '#78350F',
-  },
   danger: {
+    // Keeping danger as alias to error or separate if existing code uses it
+    DEFAULT: '#FF0000',
     50: '#FEF2F2',
-    100: '#FEE2E2',
-    200: '#FECACA',
-    300: '#FCA5A5',
-    400: '#F87171',
     500: '#EF4444',
-    600: '#DC2626',
-    700: '#B91C1C',
-    800: '#991B1B',
-    900: '#7F1D1D',
   },
 };

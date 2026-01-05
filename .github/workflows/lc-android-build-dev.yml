@@ -33,7 +33,7 @@ jobs:
 
       - name: Generate Test APK
         run: |
-          pnpm prebuild:${{ APP_ENV }}
+          pnpm prebuild:${{ env.APP_ENV }}
           cd  android
           chmod +x ./gradlew
           ./gradlew assembleDebug --no-daemon

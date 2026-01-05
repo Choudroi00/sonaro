@@ -6,30 +6,37 @@ import { tv } from 'tailwind-variants';
 
 const button = tv({
   slots: {
-    container: 'my-2 flex flex-row items-center justify-center rounded-md px-4',
-    label: 'font-inter text-base font-semibold',
+    container:
+      'my-2 flex flex-row items-center justify-center rounded-full px-6',
+    label: 'font-audiowide text-base font-medium',
     indicator: 'h-6 text-white',
   },
 
   variants: {
     variant: {
       default: {
-        container: 'bg-black dark:bg-white',
-        label: 'text-white dark:text-black',
-        indicator: 'text-white dark:text-black',
-      },
-      secondary: {
-        container: 'bg-primary-600',
-        label: 'text-secondary-600',
+        container: 'bg-primary dark:bg-primary',
+        label: 'text-white',
         indicator: 'text-white',
       },
+      blue: {
+        // Primary Blue variant
+        container: 'bg-secondary',
+        label: 'text-white',
+        indicator: 'text-white',
+      },
+      secondary: {
+        container: 'border border-neutral-200 bg-white',
+        label: 'text-black',
+        indicator: 'text-black',
+      },
       outline: {
-        container: 'border border-neutral-400',
+        container: 'border border-neutral-400 bg-transparent',
         label: 'text-black dark:text-neutral-100',
         indicator: 'text-black dark:text-neutral-100',
       },
       destructive: {
-        container: 'bg-red-600',
+        container: 'bg-error',
         label: 'text-white',
         indicator: 'text-white',
       },
@@ -46,30 +53,41 @@ const button = tv({
     },
     size: {
       default: {
-        container: 'h-10 px-4',
+        container: 'h-14', // 56px
         label: 'text-base',
       },
       lg: {
-        container: 'h-12 px-8',
+        container: 'h-16 px-8',
         label: 'text-xl',
       },
       sm: {
-        container: 'h-8 px-3',
+        container: 'h-10 px-4',
         label: 'text-sm',
-        indicator: 'h-2',
+        indicator: 'h-4',
       },
-      icon: { container: 'size-9' },
+      icon: {
+        container: 'size-10 rounded-full p-0', // 40px
+      },
+      iconLg: {
+        container: 'size-[72px] rounded-full p-0',
+      },
+      iconXl: {
+        container: 'size-20 rounded-full p-0', // 80px
+      },
+      icon2Xl: {
+        container: 'size-24 rounded-full p-0', // 96px
+      },
     },
     disabled: {
       true: {
-        container: 'bg-neutral-300 dark:bg-neutral-300',
+        container: 'border-neutral-300 bg-neutral-300 dark:bg-neutral-300',
         label: 'text-neutral-600 dark:text-neutral-600',
         indicator: 'text-neutral-400 dark:text-neutral-400',
       },
     },
     fullWidth: {
       true: {
-        container: '',
+        container: 'w-full',
       },
       false: {
         container: 'self-center',

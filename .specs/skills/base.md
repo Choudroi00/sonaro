@@ -42,6 +42,16 @@ src
 - React Native Keyboard Controller
 - React Native SVG
 - React Native MMKV
+- Axios
+- React Hook Form
+- Zod
+- I18next
+- @gorhom/bottom-sheet
+- @shopify/flash-list
+- Moti
+- React Native Reanimated
+- React Native Gesture Handler
+- React Native Fast TFLite
 
 ## Naming Conventions
 

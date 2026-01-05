@@ -1,54 +1,54 @@
 import { useRouter } from 'expo-router';
 import React from 'react';
 
-import { Cover } from '@/components/cover';
-import {
-  Button,
-  FocusAwareStatusBar,
-  SafeAreaView,
-  Text,
-  View,
-} from '@/components/ui';
+import { Pressable, Text, View } from '@/components/ui';
 import { useIsFirstTime } from '@/lib/hooks';
+
 export default function Onboarding() {
   const [_, setIsFirstTime] = useIsFirstTime();
   const router = useRouter();
+
+  const handleStart = () => {
+    setIsFirstTime(false);
+    router.replace('/(app)/');
+  };
+
   return (
-    <View className="flex h-full items-center  justify-center">
-      <FocusAwareStatusBar />
-      <View className="w-full flex-1">
-        <Cover />
-      </View>
-      <View className="justify-end ">
-        <Text className="my-3 text-center text-5xl font-bold">
-          Obytes Starter
-        </Text>
-        <Text className="mb-2 text-center text-lg text-gray-600">
-          The right way to build your mobile app
+    <View className="flex-1 justify-between bg-white px-6 py-16">
+      <View className="items-center gap-6">
+        <Text className="text-center text-3xl font-bold">
+          Engine Health in Your Pocket
         </Text>
 
-        <Text className="my-1 pt-6 text-left text-lg">
-          🚀 Production-ready{' '}
-        </Text>
-        <Text className="my-1 text-left text-lg">
-          🥷 Developer experience + Productivity
-        </Text>
-        <Text className="my-1 text-left text-lg">
-          🧩 Minimal code and dependencies
-        </Text>
-        <Text className="my-1 text-left text-lg">
-          💪 well maintained third-party libraries
-        </Text>
+        {/* Illustration Placeholder */}
+        <View className="aspect-square w-full items-center justify-center rounded-3xl bg-[#F5F5F5]">
+          <Text className="text-9xl">🛡️</Text>
+        </View>
+
+        <View className="gap-4">
+          <Benefit text="Production-ready AI models" />
+          <Benefit text="Instant sound analysis" />
+          <Benefit text="Expert maintenance advice" />
+        </View>
       </View>
-      <SafeAreaView className="mt-6">
-        <Button
-          label="Let's Get Started "
-          onPress={() => {
-            setIsFirstTime(false);
-            router.replace('/login');
-          }}
-        />
-      </SafeAreaView>
+
+      <Pressable
+        className="h-14 w-full items-center justify-center rounded-full bg-[#FF6D00]"
+        onPress={handleStart}
+      >
+        <Text className="text-lg font-bold text-white">
+          Let&apos;s Get Started
+        </Text>
+      </Pressable>
+    </View>
+  );
+}
+
+function Benefit({ text }: { text: string }) {
+  return (
+    <View className="flex-row items-center gap-3">
+      <Text className="text-xl text-[#FF6D00]">✓</Text>
+      <Text className="text-lg text-gray-700">{text}</Text>
     </View>
   );
 }

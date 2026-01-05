@@ -19,6 +19,34 @@ const appIconBadgeConfig: AppIconBadgeConfig = {
   ],
 };
 
+const plugins: ExpoConfig['plugins'] = [
+  [
+    'expo-splash-screen',
+    {
+      backgroundColor: '#2E3C4B',
+      image: './assets/splash-icon.png',
+      imageWidth: 150,
+    },
+  ],
+  [
+    'expo-font',
+    {
+      fonts: ['./assets/fonts/Audiowide.ttf', './assets/fonts/Inter.ttf'],
+    },
+  ],
+  'expo-localization',
+  'expo-router',
+  [
+    'expo-av',
+    {
+      microphonePermission:
+        'Allow $(PRODUCT_NAME) to access your microphone to diagnose engine sounds.',
+    },
+  ],
+  ['app-icon-badge', appIconBadgeConfig],
+  ['react-native-edge-to-edge'],
+];
+
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: Env.NAME,
@@ -56,26 +84,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     favicon: './assets/favicon.png',
     bundler: 'metro',
   },
-  plugins: [
-    [
-      'expo-splash-screen',
-      {
-        backgroundColor: '#2E3C4B',
-        image: './assets/splash-icon.png',
-        imageWidth: 150,
-      },
-    ],
-    [
-      'expo-font',
-      {
-        fonts: ['./assets/fonts/Audiowide.ttf'],
-      },
-    ],
-    'expo-localization',
-    'expo-router',
-    ['app-icon-badge', appIconBadgeConfig],
-    ['react-native-edge-to-edge'],
-  ],
+  plugins,
   extra: {
     ...ClientEnv,
     eas: {

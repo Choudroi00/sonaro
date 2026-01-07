@@ -2,6 +2,7 @@ import { useRouter } from 'expo-router';
 import React from 'react';
 
 import { Pressable, ScrollView, Text, View } from '@/components/ui';
+import { translate } from '@/lib';
 import { useDiagnosticStore } from '@/store/use-diagnostic-store';
 
 export default function MultipleIssues() {
@@ -9,9 +10,9 @@ export default function MultipleIssues() {
   const reset = useDiagnosticStore((state) => state.reset);
 
   const issues = [
-    { label: 'Belt noise', score: 60 },
-    { label: 'Idle instability', score: 45 },
-    { label: 'Valve clicking', score: 30 },
+    { label: translate('home.issues.belt_noise'), score: 60 },
+    { label: translate('home.issues.idle_instability'), score: 45 },
+    { label: translate('home.issues.valve_clicking'), score: 30 },
   ];
 
   const handleRecordAgain = () => {
@@ -29,10 +30,10 @@ export default function MultipleIssues() {
         </View>
 
         <Text className="mb-1 text-2xl font-bold text-[#D50000]">
-          Multiple issues found
+          {translate('home.multiple_issues')}
         </Text>
         <Text className="mb-8 text-base text-[#C0CA33]">
-          Select one to view instructions
+          {translate('home.select_issue_desc')}
         </Text>
 
         <ScrollView className="mb-10 w-full gap-4">
@@ -66,7 +67,7 @@ export default function MultipleIssues() {
           onPress={handleRecordAgain}
         >
           <Text className="text-base font-semibold text-white">
-            Record Again
+            {translate('home.record_again')}
           </Text>
         </Pressable>
       </View>

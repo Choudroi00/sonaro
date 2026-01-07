@@ -1,15 +1,20 @@
-import { Audio } from 'expo-av';
+import {
+  AudioModule,
+  AudioQuality,
+  AudioRecorder,
+  IOSOutputFormat,
+} from 'expo-audio';
 
 export type AudioSliceCallback = (uri: string) => Promise<void>;
 
 class AudioService {
-  private recording: Audio.Recording | null = null;
+  private recorder: any = null;
   private isRecording = false;
   private sliceTimeout: ReturnType<typeof setTimeout> | null = null;
   private onSliceReady: AudioSliceCallback | null = null;
 
   async requestPermissions() {
-    const { status } = await Audio.requestPermissionsAsync();
+    const { status } = await AudioModule.requestRecordingPermissionsAsync();
     return status === 'granted';
   }
 
@@ -25,33 +30,34 @@ class AudioService {
     if (!this.isRecording) return;
 
     try {
-      await Audio.setAudioModeAsync({
-        allowsRecordingIOS: true,
-        playsInSilentModeIOS: true,
+      await AudioModule.setAudioModeAsync({
+        allowsRecording: true,
+        playsInSilentMode: true,
       });
 
-      const { recording } = await Audio.Recording.createAsync({
+      const options = {
+        extension: '.wav',
+        sampleRate: 16000,
+        numberOfChannels: 1,
+        bitRate: 128000,
         android: {
           extension: '.wav',
-          outputFormat: Audio.AndroidOutputFormat.DEFAULT,
-          audioEncoder: Audio.AndroidAudioEncoder.DEFAULT,
-          sampleRate: 44100,
-          numberOfChannels: 1,
-          bitRate: 128000,
+          outputFormat: 'default' as const,
+          audioEncoder: 'default' as const,
         },
         ios: {
           extension: '.wav',
-          audioQuality: Audio.IOSAudioQuality.HIGH,
-          sampleRate: 44100,
-          numberOfChannels: 1,
-          bitRate: 128000,
+          outputFormat: IOSOutputFormat.LINEARPCM,
+          audioQuality: AudioQuality.HIGH,
           linearPCMBitDepth: 16,
           linearPCMIsBigEndian: false,
           linearPCMIsFloat: false,
         },
-        web: {},
-      });
-      this.recording = recording;
+      };
+
+      this.recorder = new AudioRecorder(options);
+      await this.recorder.prepareToRecordAsync();
+      this.recorder.record();
 
       this.sliceTimeout = setTimeout(async () => {
         await this.stopAndPrepareNextSlice();
@@ -63,16 +69,15 @@ class AudioService {
   }
 
   private async stopAndPrepareNextSlice() {
-    if (!this.recording) return;
+    if (!this.recorder) return;
 
-    const recordingToStop = this.recording;
-    this.recording = null;
+    const recorderToStop = this.recorder;
+    this.recorder = null;
 
     try {
-      await recordingToStop.stopAndUnloadAsync();
-      const uri = recordingToStop.getURI();
+      await recorderToStop.stop();
+      const uri = recorderToStop.uri;
       if (uri && this.onSliceReady) {
-        // Trigger the callback with the 7s slice URI
         this.onSliceReady(uri);
       }
 
@@ -92,13 +97,13 @@ class AudioService {
       this.sliceTimeout = null;
     }
 
-    if (this.recording) {
+    if (this.recorder) {
       try {
-        await this.recording.stopAndUnloadAsync();
+        await this.recorder.stop();
       } catch (_err) {
         // Ignore
       }
-      this.recording = null;
+      this.recorder = null;
     }
   }
 }

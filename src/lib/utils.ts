@@ -1,5 +1,5 @@
 import { Buffer } from 'buffer';
-import * as FileSystem from 'expo-file-system';
+import { File } from 'expo-file-system';
 import { Linking } from 'react-native';
 import type { StoreApi, UseBoundStore } from 'zustand';
 
@@ -25,18 +25,33 @@ export const createSelectors = <S extends UseBoundStore<StoreApi<object>>>(
 
 export async function getPCMDataFromWav(uri: string): Promise<Float32Array> {
   try {
-    const base64 = await FileSystem.readAsStringAsync(uri, {
-      encoding: 'base64',
-    });
-    const buffer = Buffer.from(base64, 'base64');
+    const file = new File(uri);
+    if (!file.exists) {
+      console.error('WAV file does not exist', { uri });
+      return new Float32Array(0);
+    }
+
+    const bytes = await file.bytes();
+    const buffer = Buffer.from(
+      bytes.buffer,
+      bytes.byteOffset,
+      bytes.byteLength
+    );
+
+    if (buffer.length < 44) {
+      console.error(`WAV file too small: ${buffer.length} bytes`, { uri });
+      return new Float32Array(0);
+    }
 
     // WAV header is 44 bytes.
     // We assume 16-bit PCM, Mono.
-    const pcmData = buffer.subarray(44);
+    // Use subarray and copy to a new Uint8Array to ensure a new aligned ArrayBuffer
+    const pcmDataRaw = buffer.subarray(44);
+    const pcmData = new Uint8Array(pcmDataRaw);
     const samples = new Int16Array(
       pcmData.buffer,
-      pcmData.byteOffset,
-      pcmData.length / 2
+      0,
+      Math.floor(pcmData.byteLength / 2)
     );
 
     const floatSamples = new Float32Array(samples.length);
@@ -46,7 +61,7 @@ export async function getPCMDataFromWav(uri: string): Promise<Float32Array> {
 
     return floatSamples;
   } catch (err) {
-    console.error('Failed to get PCM data from WAV', err);
+    console.error('Failed to get PCM data from WAV', err, { uri });
     return new Float32Array(0);
   }
 }

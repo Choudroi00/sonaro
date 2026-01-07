@@ -2,6 +2,8 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import React from 'react';
 
 import { Pressable, Text, View } from '@/components/ui';
+import { ArrowRight } from '@/components/ui/icons';
+import { translate } from '@/lib';
 
 export default function IssueDetail() {
   const router = useRouter();
@@ -27,9 +29,15 @@ export default function IssueDetail() {
         </View>
       </View>
 
-      <Pressable className="mt-10" onPress={() => router.back()}>
+      <Pressable
+        className="mt-10 flex-row items-center gap-2"
+        onPress={() => router.back()}
+      >
+        <View style={{ transform: [{ rotate: '180deg' }] }}>
+          <ArrowRight color="#0B3056" width={15} height={15} />
+        </View>
         <Text className="text-lg font-bold text-[#0B3056]">
-          ← Back to Issues
+          {translate('home.back_to_issues')}
         </Text>
       </Pressable>
     </View>

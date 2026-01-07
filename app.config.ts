@@ -37,7 +37,7 @@ const plugins: ExpoConfig['plugins'] = [
   'expo-localization',
   'expo-router',
   [
-    'expo-av',
+    'expo-audio',
     {
       microphonePermission:
         'Allow $(PRODUCT_NAME) to access your microphone to diagnose engine sounds.',

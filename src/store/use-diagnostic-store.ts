@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
 import { audioService } from '@/lib/audio/service';
-import { mlService } from '@/lib/ml/service';
+import { mlService, type TestType } from '@/lib/ml/service';
 import { getPCMDataFromWav } from '@/lib/utils';
 
 export type DiagnosticStatus =
@@ -16,9 +16,11 @@ interface DiagnosticState {
   result: any;
   duration: number;
   sliceCount: number;
+  testType: TestType;
   setStatus: (status: DiagnosticStatus) => void;
   setResult: (result: any) => void;
   setDuration: (duration: number) => void;
+  setTestType: (testType: TestType) => void;
   reset: () => void;
   startDiagnostic: () => Promise<void>;
   stopDiagnostic: () => Promise<void>;
@@ -29,10 +31,12 @@ export const useDiagnosticStore = create<DiagnosticState>((set, get) => ({
   result: null,
   duration: 0,
   sliceCount: 0,
+  testType: 'braking',
 
   setStatus: (status) => set({ status }),
   setResult: (result) => set({ result }),
   setDuration: (duration) => set({ duration }),
+  setTestType: (testType) => set({ testType }),
 
   reset: () =>
     set({ status: 'idle', result: null, duration: 0, sliceCount: 0 }),
@@ -43,11 +47,14 @@ export const useDiagnosticStore = create<DiagnosticState>((set, get) => ({
   },
 
   startDiagnostic: async () => {
+    const { testType } = get();
     const hasPermission = await audioService.requestPermissions();
     if (!hasPermission) {
       set({ status: 'error' });
       return;
     }
+
+    await mlService.loadModel(testType);
 
     set({ status: 'recording', result: null, duration: 0, sliceCount: 0 });
 

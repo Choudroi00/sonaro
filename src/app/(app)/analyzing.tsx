@@ -2,6 +2,7 @@ import { useRouter } from 'expo-router';
 import React, { useEffect } from 'react';
 
 import { Text, View } from '@/components/ui';
+import { translate } from '@/lib';
 import { useDiagnosticStore } from '@/store/use-diagnostic-store';
 
 export default function Analyzing() {
@@ -30,10 +31,10 @@ export default function Analyzing() {
 
       <View className="items-center gap-3">
         <Text className="text-center text-2xl text-white">
-          Analyzing engine sound...
+          {translate('home.analyzing')}
         </Text>
         <Text className="text-center text-lg text-[#80DEEA]">
-          This will only take a few seconds
+          {translate('home.analyzing_desc')}
         </Text>
       </View>
 

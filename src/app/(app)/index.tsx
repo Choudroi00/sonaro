@@ -3,22 +3,24 @@ import React from 'react';
 
 import { Pressable, Text, View } from '@/components/ui';
 import { CaretDown, Gallery, Menu, Record } from '@/components/ui/icons';
-import { useDiagnosticStore } from '@/store/use-diagnostic-store';
+import { useSelectedLanguage } from '@/lib';
 
 export default function Home() {
   const router = useRouter();
-  const startDiagnostic = useDiagnosticStore((state) => state.startDiagnostic);
+  const { language } = useSelectedLanguage();
 
   const handleRecordPress = async () => {
-    await startDiagnostic();
-    router.push('/(app)/analyzing');
+    router.push('/(app)/test-selection');
   };
 
   return (
     <View className="flex-1 justify-between bg-[#0B3056] px-6 py-16">
       {/* Language Selector */}
-      <Pressable className="flex-row items-center gap-2">
-        <Text className="text-lg text-white">En</Text>
+      <Pressable
+        className="flex-row items-center gap-2"
+        onPress={() => router.push('/settings')}
+      >
+        <Text className="text-lg uppercase text-white">{language}</Text>
         <CaretDown color="white" />
       </Pressable>
 

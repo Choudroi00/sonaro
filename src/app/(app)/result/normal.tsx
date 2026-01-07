@@ -2,6 +2,7 @@ import { useRouter } from 'expo-router';
 import React from 'react';
 
 import { Pressable, Text, View } from '@/components/ui';
+import { translate } from '@/lib';
 import { useDiagnosticStore } from '@/store/use-diagnostic-store';
 
 export default function NormalResult() {
@@ -22,15 +23,17 @@ export default function NormalResult() {
         </View>
 
         <Text className="font-audiowide text-2xl font-bold text-white">
-          Engine Status
+          {translate('home.engine_status')}
         </Text>
 
         <View className="h-12 w-48 items-center justify-center rounded-lg bg-[#006400]">
-          <Text className="text-lg font-semibold text-white">Normale</Text>
+          <Text className="text-lg font-semibold text-white">
+            {translate('home.normal')}
+          </Text>
         </View>
 
         <Text className="px-4 text-center text-base text-[#CDDC39]">
-          No abnormal engine sounds detected.
+          {translate('home.normal_desc')}
         </Text>
       </View>
 
@@ -38,7 +41,9 @@ export default function NormalResult() {
         className="h-14 w-full items-center justify-center rounded-full bg-[#FF6D00]"
         onPress={handleBack}
       >
-        <Text className="text-lg font-bold text-white">Back to Home</Text>
+        <Text className="text-lg font-bold text-white">
+          {translate('common.back_home')}
+        </Text>
       </Pressable>
     </View>
   );

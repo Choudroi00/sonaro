@@ -2,6 +2,7 @@ import { useRouter } from 'expo-router';
 import React from 'react';
 
 import { Pressable, Text, View } from '@/components/ui';
+import { translate } from '@/lib';
 
 export default function Welcome() {
   const router = useRouter();
@@ -11,11 +12,13 @@ export default function Welcome() {
   };
 
   return (
-    <View className="flex-1 justify-between bg-white">
+    <View className="size-full justify-between bg-white">
       <View className="items-center gap-4 px-6 pt-16">
-        <Text className="text-3xl font-bold text-black">Welcome to Sonaro</Text>
+        <Text className="text-3xl font-bold text-black">
+          {translate('welcome.title')}
+        </Text>
         <Text className="text-xl font-medium text-[#FF6D00]">
-          AI-powered engine sound diagnostics
+          {translate('welcome.subtitle')}
         </Text>
 
         {/* Car Illustration Placeholder */}
@@ -32,7 +35,7 @@ export default function Welcome() {
           {/* Google Icon Placeholder */}
           <Text>G</Text>
           <Text className="text-base font-medium text-black">
-            Continue with Google
+            {translate('common.continue_google')}
           </Text>
         </Pressable>
 
@@ -41,7 +44,7 @@ export default function Welcome() {
           onPress={handleGetStarted}
         >
           <Text className="text-base font-medium text-white">
-            Continue as a Guest
+            {translate('common.continue_guest')}
           </Text>
         </Pressable>
 
@@ -51,7 +54,9 @@ export default function Welcome() {
           className="h-14 w-full items-center justify-center rounded-full bg-black"
           onPress={() => router.push('/how-to-use')}
         >
-          <Text className="text-base font-medium text-white">How to use</Text>
+          <Text className="text-base font-medium text-white">
+            {translate('common.how_to_use')}
+          </Text>
         </Pressable>
       </View>
     </View>

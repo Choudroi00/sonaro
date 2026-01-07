@@ -1,6 +1,52 @@
 {
+  "common": {
+    "back": "Back",
+    "back_home": "Back to Home",
+    "cancel": "Cancel",
+    "continue_google": "Continue with Google",
+    "continue_guest": "Continue as a Guest",
+    "get_started": "Let's Get Started",
+    "how_to_use": "How to use",
+    "next": "Next",
+    "ok": "OK"
+  },
+  "home": {
+    "analyzing": "Analyzing engine sound...",
+    "analyzing_desc": "This will only take a few seconds",
+    "attention": "Attention Needed",
+    "attention_desc": "We have detected some issues that require your attention.",
+    "back_to_issues": "Back to Issues",
+    "engine_status": "Engine Status",
+    "issues": {
+      "belt_noise": "Belt noise",
+      "idle_instability": "Idle instability",
+      "valve_clicking": "Valve clicking"
+    },
+    "multiple_issues": "Multiple issues found",
+    "normal": "Normal",
+    "normal_desc": "No abnormal engine sounds detected.",
+    "record_again": "Record Again",
+    "select_issue_desc": "Select one to view instructions",
+    "view_issues": "View Detected Issues"
+  },
+  "how_to_use": {
+    "step_1_desc": "Make sure your engine is running and stable.",
+    "step_1_title": "Start the Engine",
+    "step_2_desc": "Tap the Record button and hold your phone near the engine.",
+    "step_2_title": "Record the Sound",
+    "step_3_desc": "Sonaro analyzes the sound using AI. This takes a few seconds.",
+    "step_3_title": "Wait for Analysis",
+    "step_4_desc": "Detected issues will appear clearly on your screen.",
+    "step_4_title": "View the Results",
+    "step_5_desc": "Select any detected problem to see recommendations and next steps.",
+    "step_5_title": "Tap for Instructions",
+    "title": "How to use"
+  },
   "onboarding": {
-    "message": "Welcome to obytes app site"
+    "benefit_1": "Production-ready AI models",
+    "benefit_2": "Instant sound analysis",
+    "benefit_3": "Expert maintenance advice",
+    "title": "Engine Health in Your Pocket"
   },
   "settings": {
     "about": "About",
@@ -11,8 +57,6 @@
     "github": "Github",
     "language": "Language",
     "links": "Links",
-    "logout": "Logout",
-    "more": "More",
     "privacy": "Privacy Policy",
     "rate": "Rate",
     "share": "Share",
@@ -29,5 +73,18 @@
     "version": "Version",
     "website": "Website"
   },
-  "welcome": "Welcome to obytes app site"
+  "tests": {
+    "braking": "Braking Test",
+    "braking_desc": "Analyze engine sound during braking",
+    "idle": "Idle State Test",
+    "idle_desc": "Analyze engine sound during idle",
+    "startup": "Startup State Test",
+    "startup_desc": "Analyze engine sound during startup",
+    "title": "Select Test"
+  },
+  "welcome": {
+    "subtitle": "AI-powered engine sound diagnostics",
+    "tagline": "Turning Noise Into Knowledge.",
+    "title": "Welcome to Sonaro"
+  }
 }

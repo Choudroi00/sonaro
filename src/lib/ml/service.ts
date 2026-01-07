@@ -1,50 +1,67 @@
-import { loadTensorflowModel } from 'react-native-fast-tflite';
+import {
+  loadTensorflowModel,
+  type TensorflowModel,
+} from 'react-native-fast-tflite';
 
 export type MLResult = {
   hasIssue: boolean;
   logits: [number, number];
 };
 
-class MLService {
-  private model: any = null;
+export const MODELS = {
+  braking: require('../../../assets/models/bracking_state_classifier.tflite'),
+  idle: require('../../../assets/models/idle_state_classifier.tflite'),
+  startup: require('../../../assets/models/ss_classifier.tflite'),
+} as const;
 
-  async loadModel() {
-    if (this.model) return;
-    try {
-      // Load one of the models as default
-      this.model = await loadTensorflowModel(
-        require('../../../assets/models/bracking_state_classifier.tflite')
-      );
-      console.log('Model loaded successfully');
-    } catch (err) {
-      console.error('Failed to load model', err);
-    }
-  }
+export type TestType = keyof typeof MODELS;
 
-  async runInference(inputData: Float32Array): Promise<MLResult | null> {
-    if (!this.model) {
-      console.error('Model not loaded');
-      return null;
-    }
+let currentModel: TensorflowModel | null = null;
+let currentTestType: TestType | null = null;
 
-    try {
-      // Assuming the model takes a Float32Array and returns [x1, x2]
-      const output = await this.model.run([inputData]);
-      const logits = output[0] as [number, number];
-
-      // x2 represents issue detection state
-      // if max(x1, x2) is x2 then it's a issue detection positive
-      const hasIssue = logits[1] > logits[0];
-
-      return {
-        hasIssue,
-        logits,
-      };
-    } catch (err) {
-      console.error('Inference failed', err);
-      return null;
-    }
+async function loadModel(testType: TestType) {
+  if (currentModel && currentTestType === testType) return;
+  try {
+    currentModel = await loadTensorflowModel(MODELS[testType]);
+    currentTestType = testType;
+    console.log(`Model ${testType} loaded successfully`);
+    console.log('Model inputs:', JSON.stringify(currentModel.inputs));
+    console.log('Model outputs:', JSON.stringify(currentModel.outputs));
+  } catch (err) {
+    console.error(`Failed to load model ${testType}`, err);
   }
 }
 
-export const mlService = new MLService();
+/**
+ * Runs inference on the provided waveform.
+ * @param waveform 1D tensor of float32 mono audio at 16kHz
+ */
+async function runInference(waveform: Float32Array): Promise<MLResult | null> {
+  if (!currentModel) {
+    console.error('Model not loaded');
+    return null;
+  }
+
+  try {
+    // The model expects a 1D tensor of float32 audio
+    const output = await currentModel.run([waveform]);
+    const logits = Array.from(output[0] as Float32Array) as [number, number];
+
+    // x2 represents issue detection state
+    // if max(x1, x2) is x2 then it's a issue detection positive
+    const hasIssue = logits[1] > logits[0];
+
+    return {
+      hasIssue,
+      logits,
+    };
+  } catch (err) {
+    console.error('Inference failed', err);
+    return null;
+  }
+}
+
+export const mlService = {
+  loadModel,
+  runInference,
+};

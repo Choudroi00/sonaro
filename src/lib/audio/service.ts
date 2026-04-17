@@ -6,6 +6,7 @@ import {
 } from 'expo-audio';
 
 export type AudioSliceCallback = (uri: string) => Promise<void>;
+const SLICE_DURATION_MS = 10000;
 
 class AudioService {
   private recorder: any = null;
@@ -61,7 +62,7 @@ class AudioService {
 
       this.sliceTimeout = setTimeout(async () => {
         await this.stopAndPrepareNextSlice();
-      }, 7000);
+      }, SLICE_DURATION_MS);
     } catch (_err) {
       console.error('Failed to start recording', _err);
       this.stopRecording();

@@ -11,8 +11,6 @@ export type DiagnosticStatus =
   | 'finished'
   | 'error';
 
-const SLICE_DURATION_SECONDS = 10;
-
 interface DiagnosticState {
   status: DiagnosticStatus;
   result: any;
@@ -63,10 +61,7 @@ export const useDiagnosticStore = create<DiagnosticState>((set, get) => ({
     const onSliceReady = async (uri: string) => {
       const { sliceCount, stopDiagnostic } = get();
       const nextSliceCount = sliceCount + 1;
-      set({
-        sliceCount: nextSliceCount,
-        duration: nextSliceCount * SLICE_DURATION_SECONDS,
-      });
+      set({ sliceCount: nextSliceCount, duration: nextSliceCount * 7 });
 
       console.log(`Slice ${nextSliceCount} ready: ${uri}`);
 

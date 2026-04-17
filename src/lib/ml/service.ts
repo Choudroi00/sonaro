@@ -49,6 +49,15 @@ function getRequiredInputSampleCount(model: TensorflowModel): number | null {
 
   if (positiveDims.length === 0) return null;
 
+  // For 2D+ inputs we treat the leading dimension as batch when possible and
+  // compute sample count from remaining dimensions.
+  const nonBatchPositiveDims = inputShape
+    .slice(1)
+    .filter((dim) => Number.isFinite(dim) && dim > 0);
+  if (nonBatchPositiveDims.length > 0) {
+    return nonBatchPositiveDims.reduce((total, dim) => total * dim, 1);
+  }
+
   return positiveDims.reduce((total, dim) => total * dim, 1);
 }
 
@@ -65,6 +74,7 @@ function normalizeWaveformLength(
   }
 
   if (waveform.length > requiredSize) {
+    // Deterministically truncate any excess samples to match model input size.
     return waveform.slice(0, requiredSize);
   }
 
@@ -85,10 +95,6 @@ function getHasIssue(
     if (mappedIssueIndexes && mappedIssueIndexes.length > 0) {
       return mappedIssueIndexes.includes(argmaxIndex);
     }
-  }
-
-  if (logits.length === 1) {
-    return logits[0] > 0;
   }
 
   return argmaxIndex > 0;

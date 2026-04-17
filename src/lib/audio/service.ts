@@ -42,11 +42,15 @@ class AudioService {
         bitRate: 128000,
         android: {
           extension: '.wav',
+          sampleRate: 16000,
+          numberOfChannels: 1,
           outputFormat: 'default' as const,
           audioEncoder: 'default' as const,
         },
         ios: {
           extension: '.wav',
+          sampleRate: 16000,
+          numberOfChannels: 1,
           outputFormat: IOSOutputFormat.LINEARPCM,
           audioQuality: AudioQuality.HIGH,
           linearPCMBitDepth: 16,
@@ -61,7 +65,7 @@ class AudioService {
 
       this.sliceTimeout = setTimeout(async () => {
         await this.stopAndPrepareNextSlice();
-      }, 7000);
+      }, 7500);
     } catch (_err) {
       console.error('Failed to start recording', _err);
       this.stopRecording();

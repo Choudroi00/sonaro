@@ -5,6 +5,7 @@ export default function AppLayout() {
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="index" />
       <Stack.Screen name="test-selection" />
+      <Stack.Screen name="file-chooser" />
       <Stack.Screen name="analyzing" />
       <Stack.Screen name="result" />
     </Stack>

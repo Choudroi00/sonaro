@@ -1,0 +1,91 @@
+name: Android Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Build environment'
+        required: true
+        default: 'development'
+        type: choice
+        options:
+          - development
+          - staging
+          - production
+
+env:
+  EXPO_NO_DOTENV: 1
+  CI: true
+
+jobs:
+  build:
+    name: Android ${{ inputs.environment }} Build
+    runs-on: ubuntu-latest
+    env:
+      APP_ENV: ${{ inputs.environment }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node + pnpm
+        uses: ./.github/actions/setup-node-pnpm-install
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: zulu
+          java-version: '17'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Run Expo Prebuild
+        run: pnpm prebuild:${{ env.APP_ENV }}
+
+      - name: Setup release signing
+        if: env.APP_ENV != 'development'
+        working-directory: android/app
+        run: |
+          if [ -n "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" ]; then
+            echo "Using keystore from secrets"
+            echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > release.keystore
+          else
+            echo "No keystore secret found — generating CI debug keystore for release build"
+            keytool -genkeypair -v \
+              -storetype pkcs12 \
+              -keystore release.keystore \
+              -alias release \
+              -keyalg RSA \
+              -keysize 2048 \
+              -validity 10000 \
+              -storepass android \
+              -keypass android \
+              -dname "CN=CI, OU=CI, O=CI, L=CI, ST=CI, C=US"
+          fi
+
+      - name: Build Debug APK (development)
+        if: env.APP_ENV == 'development'
+        working-directory: android
+        run: |
+          chmod +x ./gradlew
+          ./gradlew assembleDebug --no-daemon
+
+      - name: Build Release APK (staging / production)
+        if: env.APP_ENV != 'development'
+        working-directory: android
+        run: |
+          chmod +x ./gradlew
+          ./gradlew assembleRelease --no-daemon \
+            -PMYAPP_UPLOAD_STORE_FILE=release.keystore \
+            -PMYAPP_UPLOAD_STORE_PASSWORD="${{ secrets.ANDROID_KEYSTORE_PASSWORD || 'android' }}" \
+            -PMYAPP_UPLOAD_KEY_ALIAS="${{ secrets.ANDROID_KEY_ALIAS || 'release' }}" \
+            -PMYAPP_UPLOAD_KEY_PASSWORD="${{ secrets.ANDROID_KEY_PASSWORD || 'android' }}"
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apk-${{ env.APP_ENV }}
+          path: |
+            ./android/app/build/outputs/apk/debug/app-debug.apk
+            ./android/app/build/outputs/apk/release/app-release.apk
+          if-no-files-found: warn

@@ -10,6 +10,14 @@
     "next": "Next",
     "ok": "OK"
   },
+  "file_chooser": {
+    "analyze": "Analyze",
+    "file_selected": "Selected: {{name}}",
+    "no_file": "No file selected",
+    "pick_file": "Choose Audio File",
+    "select_state": "Select State",
+    "title": "File Analysis"
+  },
   "home": {
     "analyzing": "Analyzing engine sound...",
     "analyzing_desc": "This will only take a few seconds",

@@ -31,7 +31,7 @@ export default function Home() {
       <View className="flex-row items-center justify-between px-4">
         <Pressable
           className="size-20 items-center justify-center rounded-3xl bg-white"
-          onPress={() => {}}
+          onPress={() => router.push('/(app)/file-chooser')}
         >
           <Gallery color="#0B3056" />
         </Pressable>

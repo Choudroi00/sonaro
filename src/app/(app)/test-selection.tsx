@@ -1,4 +1,4 @@
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import React from 'react';
 
 import { Pressable, Text, View } from '@/components/ui';
@@ -26,13 +26,25 @@ const TESTS: { type: TestType; title: string; desc: string }[] = [
 
 export default function TestSelection() {
   const router = useRouter();
+  const { mode } = useLocalSearchParams<{ mode?: string }>();
+  const isFileMode = mode === 'file';
+
   const setTestType = useDiagnosticStore((state) => state.setTestType);
   const startDiagnostic = useDiagnosticStore((state) => state.startDiagnostic);
+  const runFileDiagnostic = useDiagnosticStore(
+    (state) => state.runFileDiagnostic
+  );
 
   const handleSelect = async (type: TestType) => {
     setTestType(type);
-    await startDiagnostic();
-    router.push('/(app)/analyzing');
+
+    if (isFileMode) {
+      router.push('/(app)/analyzing');
+      await runFileDiagnostic();
+    } else {
+      await startDiagnostic();
+      router.push('/(app)/analyzing');
+    }
   };
 
   return (
